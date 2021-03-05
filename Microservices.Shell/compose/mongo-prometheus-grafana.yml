@@ -1,0 +1,43 @@
+version: '3.1'
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: unless-stopped
+    networks:
+      - microservices
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: unless-stopped
+    networks:
+      - microservices
+    ports:
+      - 8081:8081
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    networks:
+      - microservices
+    ports:
+      - '9090:9090'
+    volumes:
+    - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana: 
+    container_name: grafana
+    image: grafana/grafana
+    restart: always
+    networks:
+      - microservices
+    ports:
+      - 3000:3000
+
+networks:
+  microservices:
+    name: microservices-network
