@@ -11,7 +11,8 @@ namespace Microservices.Common.CQRS
     {
     }
 
-    protected PagedResultBase(int currentPage, int resultsPerPage,
+    protected PagedResultBase(
+        int currentPage, int resultsPerPage,
         int totalPages, long totalResults)
     {
       CurrentPage = currentPage > totalPages ? totalPages : currentPage;

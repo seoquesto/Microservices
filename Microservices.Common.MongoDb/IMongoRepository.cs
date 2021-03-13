@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microservices.Common.CQRS;
-using Microservices.Common.Types;
 using MongoDB.Driver;
 
 namespace Microservices.Common.MongoDb

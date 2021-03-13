@@ -7,7 +7,7 @@
       "type": "process",
       "args": [
         "build",
-        "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.csproj",
+        "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.Api/Microservices.Services.Posts.Api.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -19,7 +19,7 @@
       "type": "process",
       "args": [
         "publish",
-        "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.csproj",
+        "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.Api/Microservices.Services.Posts.Api.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],
@@ -32,7 +32,7 @@
       "args": [
         "watch",
         "run",
-        "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.csproj",
+        "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.Api/Microservices.Services.Posts.Api.csproj",
         "/property:GenerateFullPaths=true",
         "/consoleloggerparameters:NoSummary"
       ],

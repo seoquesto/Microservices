@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microservices.Common.Api\Microservices.Common.Api.csproj" />
+    <ProjectReference Include="..\Microservices.Common.Shell\Microservices.Common.Shell.csproj" />
   </ItemGroup>
 
 </Project>

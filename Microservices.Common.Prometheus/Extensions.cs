@@ -1,4 +1,4 @@
-using Microservices.Common.Api;
+using Microservices.Common.Shell;
 using Microservices.Common.Prometheus.Internal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,19 +11,19 @@ namespace Microservices.Common.Prometheus
   {
     private const string SectionName = "prometheus";
 
-    public static IAppBuilder AddPrometheus(this IAppBuilder appBuilder, string sectionName = SectionName)
+    public static IShellBuilder AddPrometheus(this IShellBuilder shellBuilder, string sectionName = SectionName)
     {
-      var options = appBuilder.GetOptions<PrometheusOptions>(sectionName);
+      var options = shellBuilder.GetOptions<PrometheusOptions>(sectionName);
+      shellBuilder.Services.AddSingleton(options);
 
       if (!options.Enabled)
       {
-        return appBuilder;
+        return shellBuilder;
       }
 
-      appBuilder.Services.AddSingleton(options);
-      appBuilder.Services.AddHostedService<PrometheusJob>();
-      appBuilder.Services.AddSystemMetrics();
-      return appBuilder;
+      shellBuilder.Services.AddHostedService<PrometheusJob>();
+      shellBuilder.Services.AddSystemMetrics();
+      return shellBuilder;
     }
 
     public static IApplicationBuilder UsePrometheus(this IApplicationBuilder app)

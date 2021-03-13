@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Microservices.Services.Posts.Core\Microservices.Services.Posts.Core.csproj" />
+    <ProjectReference Include="..\..\Microservices.Common.CQRS\Microservices.Common.CQRS.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Microservices.Services.Posts.Core\Microservices.Services.Posts.Core.csproj" />
+    <ProjectReference Include="..\Microservices.Services.Posts.Application\Microservices.Services.Posts.Application.csproj" />
+    <ProjectReference Include="..\Microservices.Services.Posts.Infrastructure\Microservices.Services.Posts.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

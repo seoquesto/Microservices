@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Microservices.Services.Comments.Core\Microservices.Services.Comments.Core.csproj" />
+    <ProjectReference Include="..\Microservices.Services.Comments.Application\Microservices.Services.Comments.Application.csproj" />
+    <ProjectReference Include="..\Microservices.Services.Comments.Infrastructure\Microservices.Services.Comments.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

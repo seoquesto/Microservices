@@ -13,11 +13,10 @@
       "request": "launch",
       "preLaunchTask": "build",
       "OS-COMMENT4": "If you have changed target frameworks, make sure to update the program path.",
-      "program": "${workspaceFolder}/Microservices.Services.Posts/bin/Debug/net5.0/Microservices.Services.Posts.dll",
+      "program": "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.Api/bin/Debug/net5.0/Microservices.Services.Posts.Api.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/Microservices.Services.Posts",
+      "cwd": "${workspaceFolder}/Microservices.Services.Posts/Microservices.Services.Posts.Api",
       "stopAtEntry": false,
-      "justMyCode":false , "requireExactSource": false,
       "OS-COMMENT5": "Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser",
       "serverReadyAction": {
         "action": "openExternally",

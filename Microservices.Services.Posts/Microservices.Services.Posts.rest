@@ -1,0 +1,40 @@
+### 
+### Variables
+###
+@schema = http
+@hostname = localhost
+@port = 5000
+@host = {{schema}}://{{hostname}}:{{port}}
+
+###
+### Service is running
+###
+GET {{host}}
+
+###
+### Create post
+###
+# @name add_post
+POST {{host}}/api/v1/posts
+Content-Type: application/json
+
+{
+  "userId": "f2e62a55-ce09-4a6d-9210-237d462aa137",
+  "content": "test-content"
+}
+
+###
+### Get post
+###
+GET {{host}}/{{add_post.response.headers.Location}}
+
+###
+### Get posts
+###
+GET {{host}}/api/v1/posts
+
+###
+###
+###
+
+DELETE {{host}}/{{add_post.response.headers.Location}}

@@ -1,6 +1,5 @@
-using Microservices.Common.Api;
+using Microservices.Common.Shell;
 using Microservices.Common.MongoDb.Internal;
-using Microservices.Common.Types;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -14,18 +13,18 @@ namespace Microservices.Common.MongoDb
   {
     private const string SectionName = "mongo";
 
-    public static IAppBuilder AddMongo(this IAppBuilder appBuilder, string sectionName = SectionName)
+    public static IShellBuilder AddMongo(this IShellBuilder shellBuilder, string sectionName = SectionName)
     {
-      var options = appBuilder.GetOptions<MongoOptions>(sectionName);
-      appBuilder.Services.AddSingleton(options);
+      var options = shellBuilder.GetOptions<MongoOptions>(sectionName);
+      shellBuilder.Services.AddSingleton(options);
 
-      appBuilder.Services.AddSingleton<IMongoClient>(sp =>
+      shellBuilder.Services.AddSingleton<IMongoClient>(sp =>
       {
         var options = sp.GetService<MongoOptions>();
         return new MongoClient(options.ConnectionString);
       });
 
-      appBuilder.Services.AddTransient(sp =>
+      shellBuilder.Services.AddTransient(sp =>
       {
         var options = sp.GetService<MongoOptions>();
         var client = sp.GetService<IMongoClient>();
@@ -34,7 +33,7 @@ namespace Microservices.Common.MongoDb
 
       RegisterConventions();
 
-      return appBuilder;
+      return shellBuilder;
     }
 
     private static void RegisterConventions()
@@ -50,18 +49,18 @@ namespace Microservices.Common.MongoDb
             }, _ => true);
     }
 
-    public static IAppBuilder AddMongoRepository<TEntity, TIdentifiable>(this IAppBuilder appBuilder,
-        string collectionName)
-        where TEntity : IIdentifiable<TIdentifiable>
+    public static IShellBuilder AddMongoRepository<TEntity, TIdentifiable>(
+      this IShellBuilder shellBuilder, string collectionName)
+      where TEntity : IIdentifiable<TIdentifiable>
     {
 
-      appBuilder.Services.AddTransient<IMongoRepository<TEntity, TIdentifiable>>(sp =>
+      shellBuilder.Services.AddTransient<IMongoRepository<TEntity, TIdentifiable>>(sp =>
      {
        var database = sp.GetService<IMongoDatabase>();
        return new MongoRepository<TEntity, TIdentifiable>(database, collectionName);
      });
 
-      return appBuilder;
+      return shellBuilder;
     }
 
   }

@@ -7,13 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="mongodb.driver" Version="2.11.6" />
+    <PackageReference Include="MongoDB.Driver" Version="2.11.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microservices.Common.Types\Microservices.Common.Types.csproj" />
     <ProjectReference Include="..\Microservices.Common.CQRS\Microservices.Common.CQRS.csproj" />
-    <ProjectReference Include="..\Microservices.Common.Api\Microservices.Common.Api.csproj" />
+    <ProjectReference Include="..\Microservices.Common.Shell\Microservices.Common.Shell.csproj" />
   </ItemGroup>
 
 </Project>

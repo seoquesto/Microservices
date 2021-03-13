@@ -1,5 +1,4 @@
-using System;
-using Microservices.Common.Api;
+using Microservices.Common.Shell;
 using Microservices.Common.CQRS.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,35 +6,54 @@ namespace Microservices.Common.CQRS
 {
   public static class Extensions
   {
-    public static IAppBuilder AddCommandHandlers(this IAppBuilder appBuilder)
+    public static IShellBuilder AddCommandHandlers(this IShellBuilder shellBuilder)
     {
-      appBuilder.Services.Scan(s =>
-         s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
+      shellBuilder.Services.Scan(s =>
+              s.FromApplicationDependencies()
+             //s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
              .AddClasses(c => c.AssignableTo(typeof(ICommandHandler<>)))
              .AsImplementedInterfaces()
              .WithTransientLifetime());
-      return appBuilder;
+      return shellBuilder;
     }
-    public static IAppBuilder AddInMemoryCommandDispatcher(this IAppBuilder appBuilder)
+    public static IShellBuilder AddInMemoryCommandDispatcher(this IShellBuilder shellBuilder)
     {
-      appBuilder.Services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
-      return appBuilder;
+      shellBuilder.Services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
+      return shellBuilder;
     }
 
-    public static IAppBuilder AddQueryHandlers(this IAppBuilder appBuilder)
+    public static IShellBuilder AddQueryHandlers(this IShellBuilder shellBuilder)
     {
-      appBuilder.Services.Scan(s =>
-           s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
+      shellBuilder.Services.Scan(s =>
+                s.FromApplicationDependencies()
+               //s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
                .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)))
                .AsImplementedInterfaces()
                .WithTransientLifetime());
-      return appBuilder;
+      return shellBuilder;
     }
 
-    public static IAppBuilder AddInMemoryQueryDispatcher(this IAppBuilder appBuilder)
+    public static IShellBuilder AddInMemoryQueryDispatcher(this IShellBuilder shellBuilder)
     {
-      appBuilder.Services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
-      return appBuilder;
+      shellBuilder.Services.AddSingleton<IQueryDispatcher, QueryDispatcher>();
+      return shellBuilder;
+    }
+
+    public static IShellBuilder AddEventHandlers(this IShellBuilder shellBuilder)
+    {
+      shellBuilder.Services.Scan(s =>
+            s.FromApplicationDependencies()
+               //s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
+            .AddClasses(c => c.AssignableTo(typeof(IEventHandler<>)))
+            .AsImplementedInterfaces()
+            .WithTransientLifetime());
+      return shellBuilder;
+    }
+
+    public static IShellBuilder AddInMemoryEventDispatcher(this IShellBuilder shellBuilder)
+    {
+      shellBuilder.Services.AddSingleton<IEventDispatcher, EventDispatcher>();
+      return shellBuilder;
     }
   }
 }
