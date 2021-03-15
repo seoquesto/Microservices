@@ -19,7 +19,7 @@ namespace Microservices.Services.Posts.Infrastructure.Mongo.Repositories
       => this._postsRepository.AddAsync(post.AsDocument());
 
     public Task DeleteAsync(Guid id)
-      => this._postsRepository.DeleteAsync(id);
+      => this._postsRepository.DeleteOneAsync(id);
 
     public Task<IEnumerable<Post>> GetAllAsync()
       => this._postsRepository.FindAsync(_ => true).AsEntityAsync();

@@ -14,10 +14,9 @@
     <ProjectReference Include="..\..\Microservices.Common.Shell\Microservices.Common.Shell.csproj" />
     <ProjectReference Include="..\..\Microservices.Common.MongoDb\Microservices.Common.MongoDb.csproj" />
     <ProjectReference Include="..\..\Microservices.Common.CQRS\Microservices.Common.CQRS.csproj" />
-    <ProjectReference Include="..\Microservices.Services.Comments.Application\Microservices.Services.Comments.Application.csproj" />
-    <ProjectReference Include="..\Microservices.Services.Comments.Core\Microservices.Services.Comments.Core.csproj" />
-    <ProjectReference Include="..\Microservices.Services.Comments.Core\Microservices.Services.Posts.Comments.csproj" />
     <ProjectReference Include="..\..\Microservices.Common.RabbitMq\Microservices.Common.RabbitMq.csproj" />
+    <ProjectReference Include="..\Microservices.Services.Comments.Application\Microservices.Services.Comments.Application.csproj" />
+    <ProjectReference Include="..\Microservices.Services.Comments.Core\Microservices.Services.Posts.Comments.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@ namespace Microservices.Services.Comments.Core.Repositories
   {
     Task AddAsync(Comment comment);
     Task UpdateAsync(Comment comment);
-    Task DeleteAsync(Guid id);
+    Task DeleteByCommentIdAsync(Guid commentId);
+    Task DeleteByPostIdAsync(Guid postId);
   }
 }

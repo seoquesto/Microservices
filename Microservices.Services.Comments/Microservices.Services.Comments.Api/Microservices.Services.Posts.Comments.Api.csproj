@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Microservices.Services.Comments.Core\Microservices.Services.Comments.Core.csproj" />
     <ProjectReference Include="..\Microservices.Services.Comments.Application\Microservices.Services.Comments.Application.csproj" />
     <ProjectReference Include="..\Microservices.Services.Comments.Infrastructure\Microservices.Services.Comments.Infrastructure.csproj" />
+    <ProjectReference Include="..\Microservices.Services.Comments.Core\Microservices.Services.Posts.Comments.csproj" />
   </ItemGroup>
 
 </Project>

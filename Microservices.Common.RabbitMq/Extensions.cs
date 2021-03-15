@@ -1,6 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microservices.Common.CQRS;
+using Microservices.Common.RabbitMq.Client;
+using Microservices.Common.RabbitMq.Conventions;
+using Microservices.Common.RabbitMq.HostedService;
+using Microservices.Common.RabbitMq.Initializer;
+using Microservices.Common.RabbitMq.Publisher;
+using Microservices.Common.RabbitMq.Serializer;
+using Microservices.Common.RabbitMq.Subscriber;
 using Microservices.Common.Shell;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,28 +60,28 @@ namespace Microservices.Common.RabbitMq
     }
 
     public static Task SendAsync<TCommand>(this IBusPublisher busPublisher, TCommand command)
-           where TCommand : class, ICommand
-           => busPublisher.PublishAsync(command);
+      where TCommand : class, ICommand
+    => busPublisher.PublishAsync(command);
 
     public static Task PublishAsync<TEvent>(this IBusPublisher busPublisher, TEvent @event)
-        where TEvent : class, IEvent
-        => busPublisher.PublishAsync(@event);
+      where TEvent : class, IEvent
+    => busPublisher.PublishAsync(@event);
 
     public static IBusSubscriber SubscribeCommand<T>(this IBusSubscriber busSubscriber) where T : class, ICommand
-        => busSubscriber.Subscribe<T>(async (serviceProvider, command) =>
-        {
-          using var scope = serviceProvider.CreateScope();
-          await scope.ServiceProvider.GetRequiredService<ICommandHandler<T>>().HandleAsync(command);
-        });
+      => busSubscriber.Subscribe<T>(async (serviceProvider, command) =>
+      {
+        using var scope = serviceProvider.CreateScope();
+        await scope.ServiceProvider.GetRequiredService<ICommandHandler<T>>().HandleAsync(command);
+      });
 
     public static IBusSubscriber SubscribeEvent<T>(this IBusSubscriber busSubscriber) where T : class, IEvent
-        => busSubscriber.Subscribe<T>(async (serviceProvider, @event) =>
-        {
-          using var scope = serviceProvider.CreateScope();
-          await scope.ServiceProvider.GetRequiredService<IEventHandler<T>>().HandleAsync(@event);
-        });
+      => busSubscriber.Subscribe<T>(async (serviceProvider, @event) =>
+      {
+        using var scope = serviceProvider.CreateScope();
+        await scope.ServiceProvider.GetRequiredService<IEventHandler<T>>().HandleAsync(@event);
+      });
 
     public static IBusSubscriber UseRabbitMq(this IApplicationBuilder app)
-           => new RabbitMqSubscriber(app.ApplicationServices);
+      => new RabbitMqSubscriber(app.ApplicationServices);
   }
 }

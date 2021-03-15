@@ -6,14 +6,9 @@ using System.Threading;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Client
 {
-  public interface IBusClient
-  {
-    void Send(object message, IConvention convention, string messageId = null, string correlationId = null);
-  }
-
-  public class BusClient : IBusClient
+  internal class BusClient : IBusClient
   {
     private readonly object _lockObject = new();
     private readonly IConnection _connection;
@@ -30,7 +25,7 @@ namespace Microservices.Common.RabbitMq
       this._connection = connection;
       this._logger = logger;
       this._mqSerializer = serializer;
-      // this._loggerEnabled = options.Logger?.Enabled ?? false;
+      this._loggerEnabled = options.Logger?.Enabled ?? false;
       this._persistMessages = options?.MessagesPersisted ?? false;
       this._maxChannels = options.MaxProducerChannels <= 0 ? 1000 : options.MaxProducerChannels;
     }
@@ -52,7 +47,7 @@ namespace Microservices.Common.RabbitMq
           channel = _connection.CreateModel();
           _channels.TryAdd(threadId, channel);
           _channelsCount++;
-          // if (_loggerEnabled)
+          if (_loggerEnabled)
           {
             _logger.LogTrace($"Created a channel for thread: {threadId}, total channels: {_channelsCount}/{_maxChannels}");
           }
@@ -60,7 +55,7 @@ namespace Microservices.Common.RabbitMq
       }
       else
       {
-        // if (_loggerEnabled)
+        if (_loggerEnabled)
         {
           _logger.LogTrace($"Reused a channel for thread: {threadId}, total channels: {_channelsCount}/{_maxChannels}");
         }
@@ -80,7 +75,7 @@ namespace Microservices.Common.RabbitMq
              ? Guid.NewGuid().ToString("N")
              : correlationId;
 
-      // if (_loggerEnabled)
+      if (_loggerEnabled)
       {
         _logger.LogTrace($"Publishing a message with routing key: '{convention.RoutingKey}' " +
                          $"to exchange: '{convention.Exchange}' " +

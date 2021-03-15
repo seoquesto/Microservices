@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Conventions
 {
-  public class ConventionsBuilder : IConventionsBuilder
+  internal class ConventionsBuilder : IConventionsBuilder
   {
 
     private readonly RabbitMqOptions _options;

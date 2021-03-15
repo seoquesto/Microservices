@@ -5,6 +5,7 @@
 @hostname = localhost
 @port = 5010
 @host = {{schema}}://{{hostname}}:{{port}}
+@postId = 
 
 ###
 ### Service is running
@@ -20,8 +21,8 @@ Content-Type: application/json
 
 {
   "userId": "f2e62a55-ce09-4a6d-9212-237d462aa137",
-  "postId": "f2e62a55-ce09-4a6d-9212-237d462aa137",
-  "content": "test-content"
+  "postId": {{postId}},
+  "content": "test-content4"
 }
 
 ###
@@ -32,4 +33,4 @@ GET {{host}}/{{add_comment.response.headers.Location}}
 ###
 ### Get comments
 ###
-GET {{host}}/api/v1/comments?postId=f2e62a55-ce09-4a6d-9210-237d462aa137
+GET {{host}}/api/v1/comments?postId={{postId}}

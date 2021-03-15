@@ -8,9 +8,9 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Subscriber
 {
-  public class RabbitMqSubscriber : IBusSubscriber
+  internal class RabbitMqSubscriber : IBusSubscriber
   {
     private readonly IConnection _connection;
     private readonly IConventionsProvider _conventionProvider;

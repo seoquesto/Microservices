@@ -14,9 +14,7 @@ namespace Microservices.Common.MongoDb.Internal
     public IMongoCollection<TEntity> Collection { get; }
 
     public MongoRepository(IMongoDatabase database, string collectionName)
-    {
-      Collection = database.GetCollection<TEntity>(collectionName);
-    }
+      => this.Collection = database.GetCollection<TEntity>(collectionName);
 
     public Task<TEntity> GetAsync(TIdentifiable id)
       => GetAsync(e => e.Id.Equals(id));
@@ -40,11 +38,17 @@ namespace Microservices.Common.MongoDb.Internal
     public Task UpdateAsync(TEntity entity, Expression<Func<TEntity, bool>> predicate)
       => Collection.ReplaceOneAsync(predicate, entity);
 
-    public Task DeleteAsync(TIdentifiable id)
-      => DeleteAsync(e => e.Id.Equals(id));
+    public Task DeleteOneAsync(TIdentifiable id)
+      => DeleteOneAsync(e => e.Id.Equals(id));
 
-    public Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
+    public Task DeleteOneAsync(Expression<Func<TEntity, bool>> predicate)
       => Collection.DeleteOneAsync(predicate);
+
+    public Task DeleteManyAsync(TIdentifiable id)
+      => DeleteManyAsync(e => e.Id.Equals(id));
+
+    public Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicate)
+      => Collection.DeleteManyAsync(predicate);
 
     public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
       => Collection.Find(predicate).AnyAsync();

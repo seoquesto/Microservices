@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.HostedService
 {
   internal sealed class RabbitMqHostedService : IHostedService
   {

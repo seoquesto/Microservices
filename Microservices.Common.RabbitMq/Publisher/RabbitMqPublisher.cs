@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Publisher
 {
-  internal sealed class RabbitMqPublisher : IBusPublisher
+  internal class RabbitMqPublisher : IBusPublisher
   {
     private readonly IBusClient _client;
     private readonly IConventionsProvider _conventionsProvider;

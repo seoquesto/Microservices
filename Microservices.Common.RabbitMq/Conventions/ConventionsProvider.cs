@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Conventions
 {
-  public class ConventionsProvider : IConventionsProvider
+  internal class ConventionsProvider : IConventionsProvider
   {
     private readonly ConcurrentDictionary<Type, IConvention> _conventions = new ConcurrentDictionary<Type, IConvention>();
     private readonly IConventionsBuilder _conventionsBuilder;
 
     public ConventionsProvider(IConventionsBuilder conventionsBuilder)
-    {
-      this._conventionsBuilder = conventionsBuilder;
-    }
+      => this._conventionsBuilder = conventionsBuilder;
 
     public IConvention Get<T>() => Get(typeof(T));
 

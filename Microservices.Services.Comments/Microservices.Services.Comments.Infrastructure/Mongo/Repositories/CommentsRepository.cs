@@ -17,9 +17,11 @@ namespace Microservices.Services.Comments.Infrastructure.Mongo.Repositories
     public Task AddAsync(Comment comment)
       => this._repository.AddAsync(comment.AsDocument());
 
-    public Task DeleteAsync(Guid id)
-      => this._repository.DeleteAsync(id);
+    public Task DeleteByCommentIdAsync(Guid commentId)
+      => this._repository.DeleteOneAsync(c => c.Id == commentId);
 
+    public Task DeleteByPostIdAsync(Guid postId)
+      => this._repository.DeleteManyAsync(c => c.PostId == postId);
 
     public Task UpdateAsync(Comment comment)
     {

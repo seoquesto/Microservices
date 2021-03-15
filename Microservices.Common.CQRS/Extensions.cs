@@ -43,7 +43,7 @@ namespace Microservices.Common.CQRS
     {
       shellBuilder.Services.Scan(s =>
             s.FromApplicationDependencies()
-               //s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
+            //s.FromAssemblies(AppDomain.CurrentDomain.GetAssemblies())
             .AddClasses(c => c.AssignableTo(typeof(IEventHandler<>)))
             .AsImplementedInterfaces()
             .WithTransientLifetime());

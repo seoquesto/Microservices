@@ -6,7 +6,7 @@ using Microservices.Common.Shell;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Initializer
 {
   public class RabbitMqExchangeInitializer : IInitializer
   {

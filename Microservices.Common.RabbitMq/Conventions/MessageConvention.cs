@@ -1,6 +1,6 @@
 using System;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Conventions
 {
   public class MessageConvention : IConvention
   {

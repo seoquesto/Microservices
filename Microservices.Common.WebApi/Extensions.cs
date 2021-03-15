@@ -13,6 +13,7 @@ namespace Microservices.Common.WebApi
     {
       shellBuilder.Services.AddLogging()
                             .AddMvcCore();
+
       if (shellBuilder.Services.All(s => s.ServiceType != typeof(IExceptionToResponseMapper)))
       {
         shellBuilder.Services.AddTransient<IExceptionToResponseMapper, EmptyExceptionToResponseMapper>();

@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Microservices.Common.RabbitMq
+namespace Microservices.Common.RabbitMq.Serializer
 {
   public class NewtonsoftJsonRabbitMqSerializer : IRabbitMqSerializer
   {
