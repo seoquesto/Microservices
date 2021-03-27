@@ -13,11 +13,19 @@ namespace Microservices.Services.Posts.Infrastructure.Services
   {
     private readonly IBusPublisher _busPublisher;
     private readonly ILogger<IMessageBroker> _logger;
+    private readonly ICorrelationContextAccessor _correlationContextAccessor;
+    private readonly IMessagePropertiesAccessor _messagePropertiesAccessor;
 
-    public MessageBroker(IBusPublisher busPublisher, ILogger<IMessageBroker> logger)
+    public MessageBroker(
+      IBusPublisher busPublisher, 
+      ILogger<IMessageBroker> logger, 
+      ICorrelationContextAccessor correlationContextAccessor, 
+      IMessagePropertiesAccessor messagePropertiesAccessor)
     {
       this._busPublisher = busPublisher;
       this._logger = logger;
+      this._correlationContextAccessor = correlationContextAccessor;
+      this._messagePropertiesAccessor = messagePropertiesAccessor;
     }
     public Task PublishAsync(params IEvent[] events) => PublishAsync(events?.AsEnumerable());
 

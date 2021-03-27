@@ -16,21 +16,26 @@ namespace Microservices.Common.RabbitMq.Client
     private readonly bool _loggerEnabled;
     private readonly bool _persistMessages;
     private int _channelsCount;
+    private readonly bool _contextEnabled;
     private readonly ConcurrentDictionary<int, IModel> _channels = new();
     private readonly int _maxChannels;
     private readonly IRabbitMqSerializer _mqSerializer;
+    private readonly IContextProvider _contextProvider;
 
-    public BusClient(IConnection connection, RabbitMqOptions options, ILogger<BusClient> logger, IRabbitMqSerializer serializer)
+    public BusClient(IConnection connection, RabbitMqOptions options, ILogger<BusClient> logger, IRabbitMqSerializer serializer, IContextProvider contextProvider)
     {
       this._connection = connection;
       this._logger = logger;
       this._mqSerializer = serializer;
+      this._contextEnabled = options.Context?.Enabled == true;
       this._loggerEnabled = options.Logger?.Enabled ?? false;
       this._persistMessages = options?.MessagesPersisted ?? false;
+      this._contextProvider = contextProvider;
       this._maxChannels = options.MaxProducerChannels <= 0 ? 1000 : options.MaxProducerChannels;
     }
 
-    public void Send(object message, IConvention convention, string messageId = null, string correlationId = null)
+    public void Send(object message, IConvention convention, string messageId = null, string correlationId = null,
+        string spanContext = null, object messageContext = null, IDictionary<string, object> headers = null)
     {
       var threadId = Thread.CurrentThread.ManagedThreadId;
       if (!_channels.TryGetValue(threadId, out var channel))
@@ -75,6 +80,24 @@ namespace Microservices.Common.RabbitMq.Client
              ? Guid.NewGuid().ToString("N")
              : correlationId;
 
+      if (_contextEnabled)
+      {
+        IncludeMessageContext(messageContext, properties);
+      }
+
+      if (headers is { })
+      {
+        foreach (var (key, value) in headers)
+        {
+          if (string.IsNullOrWhiteSpace(key) || value is null)
+          {
+            continue;
+          }
+
+          properties.Headers.TryAdd(key, value);
+        }
+      }
+
       if (_loggerEnabled)
       {
         _logger.LogTrace($"Publishing a message with routing key: '{convention.RoutingKey}' " +
@@ -83,6 +106,17 @@ namespace Microservices.Common.RabbitMq.Client
       }
 
       channel.BasicPublish(convention.Exchange, convention.RoutingKey, properties, body);
+    }
+
+    private void IncludeMessageContext(object context, IBasicProperties properties)
+    {
+      if (context is { })
+      {
+        properties.Headers.Add(_contextProvider.HeaderName, this._mqSerializer.Serialize(context));
+        return;
+      }
+
+      properties.Headers.Add(_contextProvider.HeaderName, "{}");
     }
   }
 }

@@ -28,6 +28,17 @@ services:
       - '9090:9090'
     volumes:
     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  
+  seq:
+    image: datalust/seq 
+    container_name: seq
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - microservices
+    ports:
+      - 5341:80
 
   grafana: 
     container_name: grafana
@@ -38,14 +49,23 @@ services:
     ports:
       - 3000:3000
 
-  redis:
-    image: redis
-    container_name: redis
-    restart: unless-stopped
-    ports:
-      - 6379:6379
-    networks:
-      - microservices
+  # redis:
+  #   image: redis
+  #   container_name: redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - 6379:6379
+  #   networks:
+  #     - microservices
+
+  # influxdb:
+  #   image: quay.io/influxdb/influxdb:v2.0.3
+  #   container_name: influxdb
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8086:8086"
+  #   networks:
+  #   - microservices
 
   rabbitmq:
     image: rabbitmq:3-management

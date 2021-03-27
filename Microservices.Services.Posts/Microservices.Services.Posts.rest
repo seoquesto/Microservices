@@ -3,7 +3,7 @@
 ###
 @schema = http
 @hostname = localhost
-@port = 5000
+@port = 5010
 @host = {{schema}}://{{hostname}}:{{port}}
 
 ###
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
   "userId": "f2e62a55-ce09-4a6d-9210-237d462aa137",
-  "content": "test-content"
+  "content": "test-content2"
 }
 
 ###

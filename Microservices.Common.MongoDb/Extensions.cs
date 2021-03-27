@@ -16,15 +16,13 @@ namespace Microservices.Common.MongoDb
     public static IShellBuilder AddMongo(this IShellBuilder shellBuilder, string sectionName = SectionName)
     {
       var options = shellBuilder.GetOptions<MongoOptions>(sectionName);
-      shellBuilder.Services.AddSingleton(options);
-
+      shellBuilder.Services.AddSingleton<MongoOptions>(options);
       shellBuilder.Services.AddSingleton<IMongoClient>(sp =>
       {
         var options = sp.GetService<MongoOptions>();
         return new MongoClient(options.ConnectionString);
       });
-
-      shellBuilder.Services.AddTransient(sp =>
+      shellBuilder.Services.AddTransient<IMongoDatabase>(sp =>
       {
         var options = sp.GetService<MongoOptions>();
         var client = sp.GetService<IMongoClient>();
@@ -53,15 +51,13 @@ namespace Microservices.Common.MongoDb
       this IShellBuilder shellBuilder, string collectionName)
       where TEntity : IIdentifiable<TIdentifiable>
     {
-
       shellBuilder.Services.AddTransient<IMongoRepository<TEntity, TIdentifiable>>(sp =>
-     {
-       var database = sp.GetService<IMongoDatabase>();
-       return new MongoRepository<TEntity, TIdentifiable>(database, collectionName);
-     });
+      {
+        var database = sp.GetService<IMongoDatabase>();
+        return new MongoRepository<TEntity, TIdentifiable>(database, collectionName);
+      });
 
       return shellBuilder;
     }
-
   }
 }

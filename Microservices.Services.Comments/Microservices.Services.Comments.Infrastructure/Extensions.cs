@@ -10,6 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microservices.Common.Prometheus;
 using Microservices.Common.RabbitMq;
 using Microservices.Services.Comments.Application.Events.External;
+using Microservices.Services.Comments.Application.Commands;
+using Microservices.Services.Comments.Infrastructure.Exceptions;
+using Microservices.Common.WebApi;
+using Microservices.Common.AppMetrics;
+using Microservices.Services.Comments.Infrastructure.Metrics;
 
 namespace Microservices.Services.Comments.Infrastructure
 {
@@ -17,19 +22,23 @@ namespace Microservices.Services.Comments.Infrastructure
   {
     public static IServiceCollection AddInfrastructure(this IServiceCollection serviceCollection)
     {
-      serviceCollection.AddTransient<ICommentsRepository, CommentsRepository>();
+      serviceCollection.AddTransient<ICommentsRepository, CommentsRepository>()
+                       .AddHostedService<MetricsJob>();
       serviceCollection
         .AddShellBuilder()
+        .AddWebApi()
         .AddRabbitMq()
-        .AddEventHandlers()
+        .AddErrorHandler<ExceptionToResponseMapper>()
         .AddCommandHandlers()
         .AddQueryHandlers()
+        .AddEventHandlers()
         .AddInMemoryCommandDispatcher()
         .AddInMemoryQueryDispatcher()
         .AddInMemoryEventDispatcher()
         .AddMongo()
         .AddMongoRepository<CommentDocument, Guid>("comments")
         .AddPrometheus()
+        .AddMetrics()
         .Build();
 
       return serviceCollection;
@@ -38,10 +47,15 @@ namespace Microservices.Services.Comments.Infrastructure
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder applicationBuilder)
     {
       applicationBuilder
+        .UseRouting()
+        .UseEndpoints(endpoints => endpoints.MapControllers())
         .UsePrometheus()
+        .UseMetrics()
+        .UseErrorHandler()
         .UseShellBuilder()
         .UseRabbitMq()
-        .SubscribeEvent<PostRemoved>();
+        .SubscribeEvent<PostRemoved>()
+        .SubscribeCommand<CreateComment>();
       return applicationBuilder;
     }
   }

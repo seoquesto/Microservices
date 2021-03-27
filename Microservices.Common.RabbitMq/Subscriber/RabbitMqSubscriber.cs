@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
+using Microservices.Common.RabbitMq.MessageAccessor;
 
 namespace Microservices.Common.RabbitMq.Subscriber
 {
@@ -19,6 +20,8 @@ namespace Microservices.Common.RabbitMq.Subscriber
     private readonly ILogger<RabbitMqSubscriber> _logger;
     private readonly IRabbitMqSerializer _rabbitMqSerializer;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IContextProvider _contextProvider;
+    private readonly bool _loggerEnabled;
 
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
@@ -36,12 +39,14 @@ namespace Microservices.Common.RabbitMq.Subscriber
       this._logger = this._serviceProvider.GetRequiredService<ILogger<RabbitMqSubscriber>>();
       this._rabbitMqSerializer = this._serviceProvider.GetRequiredService<IRabbitMqSerializer>();
       this._qosOptions = _options.Qos ?? new RabbitMqOptions.QosOptions();
+      this._contextProvider = _serviceProvider.GetRequiredService<IContextProvider>();
+      this._loggerEnabled = _options.Logger?.Enabled ?? false;
       if (_qosOptions.PrefetchCount < 1)
       {
         _qosOptions.PrefetchCount = 1;
       }
 
-      //  if (_loggerEnabled && _options.Logger?.LogConnectionStatus is true)
+      if (_loggerEnabled && _options.Logger?.LogConnectionStatus is true)
       {
         _connection.CallbackException += ConnectionOnCallbackException;
         _connection.ConnectionShutdown += ConnectionOnConnectionShutdown;
@@ -81,6 +86,20 @@ namespace Microservices.Common.RabbitMq.Subscriber
 
         var payload = Encoding.UTF8.GetString(args.Body.Span);
         var message = _rabbitMqSerializer.Deserialize<T>(payload);
+
+        using var scope = _serviceProvider.CreateScope();
+        var messagePropertiesAccessor = scope.ServiceProvider.GetRequiredService<IMessagePropertiesAccessor>();
+        messagePropertiesAccessor.MessageProperties = new MessageProperties
+        {
+          MessageId = args.BasicProperties.MessageId,
+          CorrelationId = args.BasicProperties.CorrelationId,
+          Timestamp = args.BasicProperties.Timestamp.UnixTime,
+          Headers = args.BasicProperties.Headers
+        };
+        var correlationContextAccessor = scope.ServiceProvider.GetRequiredService<ICorrelationContextAccessor>();
+        var correlationContext = _contextProvider.Get(args.BasicProperties.Headers);
+        correlationContextAccessor.CorrelationContext = correlationContext;
+
         await handle(this._serviceProvider, message);
         channel.BasicAck(args.DeliveryTag, false);
       };

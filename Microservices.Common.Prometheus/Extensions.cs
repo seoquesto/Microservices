@@ -14,7 +14,7 @@ namespace Microservices.Common.Prometheus
     public static IShellBuilder AddPrometheus(this IShellBuilder shellBuilder, string sectionName = SectionName)
     {
       var options = shellBuilder.GetOptions<PrometheusOptions>(sectionName);
-      shellBuilder.Services.AddSingleton(options);
+      shellBuilder.Services.AddSingleton<PrometheusOptions>(options);
 
       if (!options.Enabled)
       {

@@ -2,9 +2,12 @@
 using System.Threading.Tasks;
 using Microservices.Common.CQRS;
 using Microservices.Common.RabbitMq.Client;
+using Microservices.Common.RabbitMq.Context;
+using Microservices.Common.RabbitMq.ContextAccessor;
 using Microservices.Common.RabbitMq.Conventions;
 using Microservices.Common.RabbitMq.HostedService;
 using Microservices.Common.RabbitMq.Initializer;
+using Microservices.Common.RabbitMq.MessageAccessor;
 using Microservices.Common.RabbitMq.Publisher;
 using Microservices.Common.RabbitMq.Serializer;
 using Microservices.Common.RabbitMq.Subscriber;
@@ -44,10 +47,13 @@ namespace Microservices.Common.RabbitMq
 
       var connection = connectionFactory.CreateConnection(options.HostNames.ToList(), options.ConnectionName);
       shellBuilder.Services.AddSingleton(connection);
+      shellBuilder.Services.AddSingleton<IMessagePropertiesAccessor>(new MessagePropertiesAccessor());
+      shellBuilder.Services.AddSingleton<ICorrelationContextAccessor>(new CorrelationContextAccessor());
       shellBuilder.Services.AddSingleton<IConventionsBuilder, ConventionsBuilder>();
       shellBuilder.Services.AddSingleton<IConventionsProvider, ConventionsProvider>();
       shellBuilder.Services.AddSingleton<IRabbitMqSerializer, NewtonsoftJsonRabbitMqSerializer>();
       shellBuilder.Services.AddSingleton<IBusClient, BusClient>();
+      shellBuilder.Services.AddSingleton<IContextProvider, ContextProvider>();
       shellBuilder.Services.AddSingleton<IBusPublisher, RabbitMqPublisher>();
       shellBuilder.Services.AddTransient<RabbitMqExchangeInitializer>();
       shellBuilder.Services.AddHostedService<RabbitMqHostedService>();

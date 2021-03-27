@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Microservices.Services.Posts.Application\Microservices.Services.Posts.Application.csproj" />
     <ProjectReference Include="..\Microservices.Services.Posts.Core\Microservices.Services.Posts.Core.csproj" />
     <ProjectReference Include="..\..\Microservices.Common.RabbitMq\Microservices.Common.RabbitMq.csproj" />
+    <ProjectReference Include="..\..\Microservices.Common.AppMetrics\Microservices.Common.AppMetrics.csproj" />
   </ItemGroup>
 
 </Project>

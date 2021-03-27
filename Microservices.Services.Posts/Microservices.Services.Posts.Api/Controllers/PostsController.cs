@@ -19,7 +19,7 @@ namespace Microservices.Services.Posts.Api.Controllers
         => (this._commandDispatcher, this._queryDispatcher) = (commandDispatcher, queryDispatcher);
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] CreatePost command)
+    public async Task<IActionResult> PostAsync([FromBody] CreatePost command)
     {
       await this._commandDispatcher.SendAsync(command);
       return Created($"api/v1/posts/{command.PostId.ToString()}", new object());

@@ -34,3 +34,9 @@ GET {{host}}/{{add_comment.response.headers.Location}}
 ### Get comments
 ###
 GET {{host}}/api/v1/comments?postId={{postId}}
+
+###
+### Delete Comments assinged to post id.
+###
+
+DELETE {{host}}/api/v1/comments/{{postId}}

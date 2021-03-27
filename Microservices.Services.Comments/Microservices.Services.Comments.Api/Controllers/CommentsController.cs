@@ -38,5 +38,12 @@ namespace Microservices.Services.Comments.Api.Controllers
       var posts = await _queryDispatcher.QueryAsync<PagedResult<CommentDto>>(query);
       return Ok(posts);
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteCommentsAsync([FromRoute] Guid postId)
+    {
+      await _commandDispatcher.SendAsync(new DeleteComments { PostId = postId });
+      return Ok();
+    }
   }
 }

@@ -13,6 +13,9 @@ using Microservices.Services.Posts.Infrastructure.Exceptions;
 using Microservices.Services.Posts.Application.Services;
 using Microservices.Services.Posts.Infrastructure.Services;
 using Microservices.Common.RabbitMq;
+using Microservices.Services.Posts.Application.Commands;
+using Microservices.Common.AppMetrics;
+using Microservices.Services.Posts.Infrastructure.Metrics;
 
 namespace Microservices.Services.Posts.Infrastructure
 {
@@ -20,10 +23,12 @@ namespace Microservices.Services.Posts.Infrastructure
   {
     public static IServiceCollection AddInfrastructure(this IServiceCollection serviceCollection)
     {
+      serviceCollection.AddControllers();
       serviceCollection
         .AddTransient<IPostsRepository, PostsRepository>()
         .AddSingleton<IEventMapper, EventMapper>()
-        .AddTransient<IMessageBroker, MessageBroker>();
+        .AddTransient<IMessageBroker, MessageBroker>()
+        .AddHostedService<MetricsJob>();
 
       serviceCollection
         .AddShellBuilder()
@@ -39,15 +44,24 @@ namespace Microservices.Services.Posts.Infrastructure
         .AddMongo()
         .AddMongoRepository<PostDocument, Guid>("posts")
         .AddPrometheus()
+        .AddMetrics()
         .Build();
 
       return serviceCollection;
     }
 
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder applicationBuilder)
-      => applicationBuilder
+    {
+      applicationBuilder
+        .UseRouting()
+        .UseEndpoints(endpoints => endpoints.MapControllers())
         .UsePrometheus()
+        .UseMetrics()
         .UseErrorHandler()
-        .UseShellBuilder();
+        .UseShellBuilder()
+        .UseRabbitMq()
+        .SubscribeCommand<CreatePost>();
+      return applicationBuilder;
+    }
   }
 }

@@ -8,6 +8,7 @@
     <ProjectReference Include="..\Microservices.Services.Posts.Core\Microservices.Services.Posts.Core.csproj" />
     <ProjectReference Include="..\Microservices.Services.Posts.Application\Microservices.Services.Posts.Application.csproj" />
     <ProjectReference Include="..\Microservices.Services.Posts.Infrastructure\Microservices.Services.Posts.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Microservices.Common.Logging\Microservices.Common.Logging.csproj" />
   </ItemGroup>
 
 </Project>
